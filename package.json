@@ -1,0 +1,17 @@
+{
+  "name": "carpark-sim",
+  "version": "1.0.0",
+  "description": "Bus in Carpark Simulator",
+  "main": "index.js",
+  "scripts": {
+    "app": "node index.js",
+    "test": "mocha",
+    "test:debug": "node --inspect node_modules/mocha/bin/_mocha --watch --no-timeouts"
+  },
+  "keywords": [],
+  "author": "Sam Wang",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
