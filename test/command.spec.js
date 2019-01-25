@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const { Bus, CarPark } = require('../lib/core');
-const { Command } = require('../lib/command');
+const { executeCommand } = require('../lib/command');
 
 describe('test Command', () => {
 
@@ -13,7 +13,7 @@ describe('test Command', () => {
   beforeEach(() => {
     b1 = new Bus(1);
     carPark = new CarPark(5, 5);
-    cmd = Command.applyCommand.bind(null, carPark, b1);
+    cmd = executeCommand(carPark, b1);
   });  
 
   it('can handle normal scenario', () => {
@@ -60,5 +60,16 @@ describe('test Command', () => {
       () => cmd('MOVE')
     );
     assert.equal('4, 4, NORTH', cmd('REPORT'));
+  });
+
+  it('can handle a second round with reset', () => {
+    cmd('PLACE, 2, 2, EAST');
+    assert.equal('2, 2, EAST', cmd('REPORT'));
+
+    carPark.reset();
+    b1 = new Bus(1);
+    cmd = executeCommand(carPark, b1);
+    cmd('PLACE, 2, 2, EAST');
+    assert.equal('2, 2, EAST', cmd('REPORT'));
   });
 });

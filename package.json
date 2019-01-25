@@ -1,10 +1,11 @@
 {
   "name": "carpark-sim",
   "version": "1.0.0",
-  "description": "Bus in Carpark Simulator",
+  "description": "Bus in CarPark Simulator",
   "main": "index.js",
   "scripts": {
-    "app": "node index.js",
+    "server": "node server.js",
+    "client": "node client.js commands-sample.txt",
     "test": "mocha",
     "test:debug": "node --inspect node_modules/mocha/bin/_mocha --watch --no-timeouts"
   },
