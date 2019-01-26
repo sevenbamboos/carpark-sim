@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "server": "node server.js",
-    "client": "node client.js commands-sample.txt",
+    "client1": "node client.js commands-sample1.txt",
+    "client2": "node client.js commands-sample2.txt",
     "test": "mocha",
     "test:debug": "node --inspect node_modules/mocha/bin/_mocha --watch --no-timeouts"
   },

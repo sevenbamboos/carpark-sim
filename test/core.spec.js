@@ -10,6 +10,7 @@ describe('test Bus', () => {
     const b1 = new Bus(1);
     b1.place(new Tuple2(2, 2), Facing.EAST);
     assert.equal('2, 2, EAST', b1.report());
+    assert.equal('BUS 1 (2, 2) EAST', b1.toStr());
   });
 
   it('can give the next position', () => {
@@ -70,6 +71,40 @@ describe('test CarPark', () => {
     assert(!carPark.isInRange(new Tuple2(0, -1)));
     assert(!carPark.isInRange(new Tuple2(-1, 0)));
     assert(!carPark.isInRange(new Tuple2(-1, -1)));
+  });
+
+  it('can output', () => {
+
+    const carPark = new CarPark(5, 5);
+
+    const b1 = new Bus(1);
+    b1.place(new Tuple2(2, 2), Facing.EAST);
+    carPark.addBus(b1);
+
+    const b2 = new Bus(2);
+    b2.place(new Tuple2(4, 3), Facing.NORTH);
+    carPark.addBus(b2);
+
+    console.log(carPark.toStr());
+
+    carPark.reset();
+    carPark.addBus(b1);
+
+    const traces = [];
+    traces.push(b1.moveForward());
+    traces.push(b1.moveForward());
+    traces.push(b1.turnLeft());
+    traces.push(b1.moveForward());
+    traces.push(b1.moveForward());
+    traces.push(b1.turnLeft());
+    traces.push(b1.moveForward());
+    traces.push(b1.moveForward());
+    traces.push(b1.moveForward());
+    traces.push(b1.moveForward());
+
+    console.log(carPark.toStr());
+    console.log(carPark.toTrace(traces.map(t => t.x)));
+     
   });
   
 });

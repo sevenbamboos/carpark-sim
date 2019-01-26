@@ -1,14 +1,18 @@
 'use strict';
+const { around } = require('./lib/common');
 const { CarPark, Bus } = require('./lib/core');
-const { executeCommand } = require('./lib/command');
+const { parseAndExecute } = require('./lib/command');
+const { SocketLineParser } = require('./lib/socket');
 const net = require('net');
 const port = 9999;
 const carPark = new CarPark(5, 5);
+const verbose = true;
 
-const execOneCmd = (exec, command) => {
+const execCmdOrIgnore = (exec, command, socket) => {
   console.log('cmd:', command);
   try {
-    return exec(command);
+    const result = exec(command);
+    if (result) socket.write(result.toString() + '\n');
   } catch (e) {
     console.warn(e);
   }
@@ -23,16 +27,13 @@ const server = net.createServer(socket => {
     // always create a new bus for each client
     // TODO assign a global ID
     const bus = new Bus(1);
-    const exec = executeCommand(carPark, bus);
+    const exec = around(
+      null, 
+      parseAndExecute(carPark, bus), 
+      () => { if (verbose) console.log(carPark.toStr()); } // print out carPark after each command
+    );
 
-    socket.on('data', data => {
-      data.toString().split('\n').forEach(
-        command => {
-          const result = execOneCmd(exec, command);
-          if (result) socket.write(result.toString() + '\n');
-        }
-      );
-    });
+    new SocketLineParser(socket).on('line', cmd => execCmdOrIgnore(exec, cmd, socket));
 
     socket.on('close', () => {
       console.log('client closed');
